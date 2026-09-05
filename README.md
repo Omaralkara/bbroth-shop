@@ -85,18 +85,39 @@ ingredient copy on the site was transcribed from the printed label artwork
 > panel at the next print run and update `index.html` to match. Chicken is
 > already consistent at 20 g per jar / 8 g per serving.
 
-## Deploying to bbroth.asia
+## Deployment
 
-The domain is registered at GoDaddy; the site itself can be hosted free
-elsewhere and pointed at that domain. Recommended: Cloudflare Pages — free
-custom domains, automatic SSL, and good routing into Lebanon.
+Live at **https://bbroth.asia**, served by GitHub Pages from the `master`
+branch of `Omaralkara/bbroth-shop`. Push to `master` and the change is live in
+about a minute — there is no build step, the repository root is the site.
 
-Roughly: create the Cloudflare account, upload this folder to a new Pages
-project, add `bbroth.asia` as a custom domain, then change the nameservers on
-the GoDaddy domain to the two Cloudflare gives you. Account creation and the
-nameserver change have to be done by hand.
+The `CNAME` file at the root holds the custom domain; do not delete it.
+
+DNS lives at GoDaddy. The apex `A` records point at GitHub Pages:
+
+| Type | Name | Value |
+|---|---|---|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+
+GitHub publishes four Pages addresses; only two are set here, which is enough
+to serve. Adding `185.199.110.153` and `185.199.111.153` as further `A` records
+on `@` would buy a little redundancy. The `www` CNAME, nameservers and the
+`_dmarc` TXT record were left as GoDaddy had them.
+
+HTTPS is enforced and the certificate renews itself.
+
+## Card payments
+
+`CARD_PAYMENT` in `index.html` is `false`, so checkout offers cash on delivery
+and Whish only. Setting it to `true` adds a "Pay by card" option that flags the
+WhatsApp order for a payment link — but only turn it on once a provider that
+operates in Lebanon is actually in place. Stripe and PayPal do not onboard
+Lebanese merchants; the workable routes are Whish Business, Areeba, or Tap
+Payments. Shelved for now by Omar's decision.
 
 ## Still to do
 
 - Bundles / multi-jar pricing (deferred — decide the pricing first).
 - Confirm the Instagram handle; the site links `@b.brothleb`, read off the label QR caption.
+- Optionally add the two remaining GitHub Pages A records.
