@@ -218,14 +218,31 @@ details p{margin:0; padding:0 1.5rem 1.35rem; color:var(--muted); font-size:.94r
 }
 .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--gold); outline-offset:1px; border-color:transparent}
 .field textarea{resize:vertical; min-height:64px}
-.pay{display:grid; grid-template-columns:1fr 1fr; gap:.6rem}
+.pay{display:grid; gap:.55rem}
 .pay label{
-  display:flex; flex-direction:column; gap:.15rem; padding:.7rem .8rem; border:1.5px solid var(--line);
-  border-radius:10px; cursor:pointer; background:var(--white); font-size:.88rem; font-weight:600;
+  display:flex; align-items:center; gap:.75rem; padding:.8rem .9rem;
+  border:1.5px solid var(--line); border-radius:12px; cursor:pointer;
+  background:var(--white); transition:border-color .15s, background .15s;
 }
-.pay label:has(input:checked){border-color:var(--gold); background:#FFFBF2}
-.pay label small{font-weight:400; color:var(--muted); font-size:.76rem}
-.pay input{margin:0 0 .1rem}
+.pay label:hover{border-color:#CFC5AE}
+.pay label:has(input:checked){border-color:var(--gold-dark); background:#FFFBF2}
+.pay label:has(input:focus-visible){outline:2px solid var(--gold-dark); outline-offset:2px}
+/* Custom radio: the native control stretched to full width inside a flex column. */
+/* These radios sit inside a .field, so the text-input rule above lands its
+   padding on them. Under border-box that padding is a floor the box cannot
+   shrink past, which stretched the circle into an oval — hence padding:0. */
+.pay input{
+  appearance:none; -webkit-appearance:none; margin:0; padding:0; flex:none;
+  width:20px; height:20px; min-width:20px; aspect-ratio:1;
+  border:2px solid #C6BCA6; border-radius:50%;
+  background:var(--white); position:relative; cursor:pointer; transition:.15s;
+}
+.pay input:checked{border-color:var(--gold-dark); background:var(--gold-dark)}
+.pay input:checked::after{content:""; position:absolute; inset:4px; background:#fff; border-radius:50%}
+.pay .t{display:flex; flex-direction:column; gap:.1rem; min-width:0}
+.pay .t b{font-family:Outfit,sans-serif; font-size:.94rem; font-weight:600; color:var(--ink)}
+.pay .t small{font-size:.78rem; color:var(--muted)}
+.pay .ic{flex:none; margin-left:auto; color:var(--gold-dark); opacity:.75}
 .warnbox{background:#FFF4E8; border:1px solid #F0D5B4; color:#8A5424; border-radius:10px;
   padding:.7rem .85rem; font-size:.84rem; margin-bottom:.9rem}
 .freebar{display:block; font-size:.84rem; color:var(--green-soft); margin-bottom:.85rem}
@@ -482,13 +499,20 @@ footer a:hover{color:var(--gold)}
 const WA_NUMBER = "96171240389";
 const MIN_ORDER = 6;
 const FREE_DELIVERY = 24;   // subtotal at or above this ships free
+
+// Card payments need a provider that operates in Lebanon before this can be
+// honoured — a Whish Business account, or a MENA gateway such as Areeba or
+// MyFatoorah that can issue a payment link. Flip to true once one is in place;
+// the checkout then offers "Pay by card" and flags it on the WhatsApp order so
+// the link gets sent instead of collecting cash.
+const CARD_PAYMENT = false;
 const ZONES = { beirut:{label:"Beirut", fee:3}, outside:{label:"Outside Beirut", fee:5} };
 
 // `full` is the regular shelf price; `price` is the launch price customers pay
 // now. Framed as an opening offer rather than a struck-through "was", because
 // these jars have not been sold at the higher price yet.
 const PRODUCTS = [
-  { id:"beef", name:"Pure Beef Bone Broth", ar:"مرق عظم بقر صافي", price:6.5, full:8.0,
+  { id:"beef", name:"Pure Beef Bone Broth", ar:"مرق عظم بقر صافي", price:6.5, full:8.1,
     img:"assets/product-beef.jpg", tag:"18g protein",
     desc:"Deep, savoury and rich. Fifteen hours on Lebanese beef bones with root vegetables and warm spices.",
     specs:[["250g","Net weight"],["18g","Protein/jar"],["30","Cal/serving"]] },
@@ -614,8 +638,22 @@ function render(){
     <div class="field">
       <label>Payment method</label>
       <div class="pay">
-        <label><input type="radio" name="pay" value="Cash on delivery" checked> Cash on delivery <small>Pay the driver</small></label>
-        <label><input type="radio" name="pay" value="Whish"> Whish <small>71 240 389</small></label>
+        <label>
+          <input type="radio" name="pay" value="Cash on delivery" checked>
+          <span class="t"><b>Cash on delivery</b><small>Pay the driver when it arrives</small></span>
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>
+        </label>
+        <label>
+          <input type="radio" name="pay" value="Whish">
+          <span class="t"><b>Whish transfer</b><small>Send to 71 240 389</small></span>
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </label>
+        ${CARD_PAYMENT ? `
+        <label>
+          <input type="radio" name="pay" value="Card">
+          <span class="t"><b>Pay by card</b><small>We send a secure payment link on WhatsApp</small></span>
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </label>` : ``}
       </div>
     </div>
     <div class="field"><label for="cNote">Notes <span style="font-weight:400;color:var(--muted)">(optional)</span></label><textarea id="cNote" placeholder="Anything we should know?"></textarea></div>`;
@@ -705,7 +743,7 @@ Delivery (${ZONES[zone].label}): ${free ? "FREE" : money(fee)}
 *Name:* ${name}
 *Phone:* ${phone}
 *Address:* ${addr}
-*Payment:* ${pay}${note ? `\n*Notes:* ${note}` : ""}`;
+*Payment:* ${pay}${pay === "Card" ? " — send payment link" : ""}${note ? `\n*Notes:* ${note}` : ""}`;
 
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
 }
