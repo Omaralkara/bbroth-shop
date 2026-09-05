@@ -74,8 +74,15 @@ stable for 12 months and good for 5 days refrigerated once opened. Nutrition and
 ingredient copy on the site was transcribed from the printed label artwork
 (`Bone Broth Jar Label Final ….pdf`), not invented.
 
-> **Note for the next print run:** the physical label reads "protien" (protein)
-> and "Tumeric" (turmeric). The website spells both correctly.
+> **Notes for the next print run.** The physical label reads "protien"
+> (protein) and "Tumeric" (turmeric); the website spells both correctly.
+>
+> The beef label also disagrees with itself: the front panel says **18 g protein
+> per jar** (confirmed correct by Omar, and what the site shows) while the
+> nutrition panel says 6 g per 100 g serving, which over 2.5 servings comes to
+> 15 g. The site states 7.2 g per serving so the two figures reconcile. The
+> printed panel should be corrected to match. Chicken is consistent at 20 g per
+> jar / 8 g per serving.
 
 ## Deploying to bbroth.asia
 
