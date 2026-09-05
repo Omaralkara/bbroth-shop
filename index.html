@@ -124,8 +124,15 @@ section{padding:5.5rem 0}
 .card__spec b{display:block; font-family:Outfit,sans-serif; font-size:1.02rem; font-weight:700; color:var(--green)}
 .card__spec span{font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em}
 .card__buy{display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:.3rem}
-.price{font-family:Outfit,sans-serif; font-size:1.65rem; font-weight:700; color:var(--green)}
+.price{font-family:Outfit,sans-serif; font-size:1.65rem; font-weight:700; color:var(--green);
+  display:flex; align-items:baseline; flex-wrap:wrap; gap:.1rem .45rem}
 .price small{font-size:.8rem; font-weight:500; color:var(--muted)}
+.price s{font-size:1rem; font-weight:500; color:var(--muted); text-decoration-thickness:1.5px}
+.price em{flex-basis:100%; font-family:Inter,sans-serif; font-style:normal; font-size:.72rem;
+  font-weight:600; letter-spacing:.07em; text-transform:uppercase; color:var(--gold-dark)}
+.card__save{position:absolute; top:14px; right:14px; background:var(--green); color:#fff;
+  font-family:Outfit,sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.05em;
+  padding:.34rem .68rem; border-radius:999px}
 
 /* ---------- feature strip ---------- */
 .strip{background:var(--green); color:#fff}
@@ -227,6 +234,7 @@ details p{margin:0; padding:0 1.5rem 1.35rem; color:var(--muted); font-size:.94r
 .freebar i::after{content:""; display:block; height:100%; width:var(--p,0%);
   background:var(--gold); border-radius:999px; transition:width .3s ease}
 .freebar--won{font-weight:600; color:var(--gold-dark)}
+.saved{margin-top:.6rem; text-align:center; font-size:.82rem; font-weight:600; color:var(--gold-dark)}
 .freebar--won span::before{content:"✓ "}
 
 /* ---------- announcement ---------- */
@@ -265,7 +273,7 @@ footer a:hover{color:var(--gold)}
 </head>
 <body>
 
-<div class="announce">Free delivery on orders over $24</div>
+<div class="announce">Launch prices — up to 20% off · Free delivery on orders over $24</div>
 
 <header>
   <div class="wrap nav">
@@ -476,16 +484,20 @@ const MIN_ORDER = 6;
 const FREE_DELIVERY = 24;   // subtotal at or above this ships free
 const ZONES = { beirut:{label:"Beirut", fee:3}, outside:{label:"Outside Beirut", fee:5} };
 
+// `full` is the regular shelf price; `price` is the launch price customers pay
+// now. Framed as an opening offer rather than a struck-through "was", because
+// these jars have not been sold at the higher price yet.
 const PRODUCTS = [
-  { id:"beef", name:"Pure Beef Bone Broth", ar:"مرق عظم بقر صافي", price:6.5,
+  { id:"beef", name:"Pure Beef Bone Broth", ar:"مرق عظم بقر صافي", price:6.5, full:8.0,
     img:"assets/product-beef.jpg", tag:"15g protein",
     desc:"Deep, savoury and rich. Fifteen hours on Lebanese beef bones with root vegetables and warm spices.",
     specs:[["250g","Net weight"],["15g","Protein/jar"],["30","Cal/serving"]] },
-  { id:"chicken", name:"Pure Chicken Bone Broth", ar:"مرق عظم دجاج صافي", price:6.0,
+  { id:"chicken", name:"Pure Chicken Bone Broth", ar:"مرق عظم دجاج صافي", price:6.0, full:7.5,
     img:"assets/product-chicken.jpg", tag:"20g protein",
     desc:"Lighter, golden and clean-tasting. Our most protein-dense jar, and the easy place to start.",
     specs:[["250g","Net weight"],["20g","Protein/jar"],["32","Cal/serving"]] }
 ];
+const pctOff = p => Math.round((1 - p.price / p.full) * 100);
 
 const money = n => "$" + n.toFixed(2);
 let cart = {};
@@ -498,6 +510,7 @@ document.getElementById("products").innerHTML = PRODUCTS.map(p => `
     <div class="card__img">
       <img src="${p.img}" alt="${p.name}" loading="lazy">
       <span class="card__tag">${p.tag}</span>
+      <span class="card__save">Save ${pctOff(p)}%</span>
     </div>
     <div class="card__body">
       <h3>${p.name}</h3>
@@ -507,7 +520,11 @@ document.getElementById("products").innerHTML = PRODUCTS.map(p => `
         ${p.specs.map(s => `<div class="card__spec"><b>${s[0]}</b><span>${s[1]}</span></div>`).join("")}
       </div>
       <div class="card__buy">
-        <span class="price">${money(p.price)} <small>/ jar</small></span>
+        <span class="price">
+          ${money(p.price)} <small>/ jar</small>
+          <s>${money(p.full)}</s>
+          <em>Launch price</em>
+        </span>
         <button class="btn btn-primary" data-add="${p.id}">Add to order</button>
       </div>
     </div>
@@ -517,6 +534,8 @@ document.getElementById("products").innerHTML = PRODUCTS.map(p => `
 const subtotal = () => Object.entries(cart)
   .reduce((s,[id,q]) => s + PRODUCTS.find(p=>p.id===id).price * q, 0);
 const count = () => Object.values(cart).reduce((a,b)=>a+b,0);
+const saved = () => Object.entries(cart)
+  .reduce((s,[id,q]) => { const p = PRODUCTS.find(x=>x.id===id); return s + (p.full - p.price) * q; }, 0);
 
 function addItem(id, btn){
   cart[id] = (cart[id]||0) + 1; save(); render();
@@ -571,7 +590,7 @@ function render(){
       <img src="${p.img}" alt="">
       <div class="line__info">
         <b>${p.name}</b>
-        <span>${money(p.price)} each · 250g</span>
+        <span>${money(p.price)} each <s style="color:var(--muted);opacity:.75">${money(p.full)}</s> · 250g</span>
         <div class="qty">
           <button data-q="${id}|${q-1}" aria-label="Decrease">−</button>
           <b>${q}</b>
@@ -605,6 +624,7 @@ function render(){
     ${under ? `<div class="warnbox">Minimum order is ${money(MIN_ORDER)}. Add ${money(MIN_ORDER-sub)} more to check out.</div>` : ``}
     <div id="freeNudge"></div>
     <div class="totals" id="totals"></div>
+    ${saved() > 0 ? `<div class="saved">You save ${money(saved())} at launch prices</div>` : ``}
     <button class="btn btn-primary btn-wide" id="checkout" style="margin-top:.9rem" ${under?"disabled":""}>
       Send order on WhatsApp
     </button>
@@ -678,7 +698,7 @@ function checkout(){
 
 ${lines}
 
-Subtotal: ${money(sub)}
+Subtotal: ${money(sub)}${saved() > 0 ? `  (launch prices — saved ${money(saved())})` : ""}
 Delivery (${ZONES[zone].label}): ${free ? "FREE" : money(fee)}
 *Total: ${money(sub+fee)}*
 

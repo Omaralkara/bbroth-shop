@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>B.Broth — Launching Soon</title>
+<meta name="description" content="B.Broth — pure Lebanese bone broth, slow-simmered in small batches. Our online shop is opening soon. Order on WhatsApp in the meantime.">
+<meta property="og:title" content="B.Broth — Launching Soon">
+<meta property="og:description" content="Pure Lebanese bone broth. Ancient remedy, modern wellness. Opening soon.">
+<meta property="og:image" content="assets/coming-soon-bg.jpg">
+<link rel="icon" href="assets/logo-black.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#303A2C; --gold:#CAAB61; --gold-dark:#A8873F;
+  --cream:#FAF7F0; --ink:#1C211A;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100dvh; background:var(--cream); color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  display:grid; grid-template-columns:1fr 1fr;
+}
+img{display:block; max-width:100%}
+
+/* left: the message */
+.panel{
+  display:flex; flex-direction:column; justify-content:center;
+  padding:clamp(2rem,5vw,4.5rem); gap:1.4rem;
+}
+.mark{width:190px; height:auto; margin-bottom:.4rem}
+.eyebrow{
+  font-family:Outfit,sans-serif; font-size:.74rem; font-weight:700;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--gold-dark); margin:0;
+}
+h1{
+  font-family:Outfit,sans-serif; font-weight:800; letter-spacing:-.025em;
+  font-size:clamp(2.1rem,4.2vw,3.4rem); line-height:1.1; margin:0; text-wrap:balance;
+}
+.lede{font-size:1.05rem; line-height:1.65; color:#5C6656; margin:0; max-width:34rem}
+.rule{height:1px; background:#E4DCC9; border:0; margin:.4rem 0}
+
+.facts{display:flex; gap:2rem; flex-wrap:wrap; margin:0}
+.fact b{display:block; font-family:Outfit,sans-serif; font-size:1.35rem; font-weight:700; color:var(--green)}
+.fact span{font-size:.8rem; color:#7A8473}
+
+.actions{display:flex; gap:.7rem; flex-wrap:wrap; margin-top:.3rem}
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem; text-decoration:none;
+  font-family:Outfit,sans-serif; font-weight:600; font-size:.95rem;
+  padding:.82rem 1.5rem; border-radius:999px; border:1.5px solid transparent;
+  transition:.18s ease;
+}
+.btn-wa{background:#25D366; color:#fff}
+.btn-wa:hover{background:#1EB755; transform:translateY(-1px)}
+.btn-ig{background:transparent; color:var(--green); border-color:#DDD3BE}
+.btn-ig:hover{border-color:var(--green); background:rgba(48,58,44,.04)}
+.btn:focus-visible{outline:2px solid var(--gold-dark); outline-offset:2px}
+
+.foot{font-size:.84rem; color:#8A9382; margin:.6rem 0 0}
+.foot a{color:var(--gold-dark)}
+
+/* right: the jars */
+/* The shot is square and carries the B.Broth watermark in its lower-right
+   corner, so it is anchored right: the crop takes from the empty left edge
+   and keeps the mark. */
+.shot{position:relative; overflow:hidden; background:#C6AF9A}
+.shot img{position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:right center}
+
+@media(max-width:880px){
+  body{grid-template-columns:1fr}
+  .shot{height:min(64vw,380px); order:-1}
+  .shot img{object-position:center bottom}
+  .panel{padding:2.4rem 1.5rem 3rem}
+  .facts{gap:1.4rem}
+}
+@media(prefers-reduced-motion:no-preference){
+  .panel > *{animation:rise .6s cubic-bezier(.2,.7,.3,1) both}
+  .panel > *:nth-child(2){animation-delay:.06s}
+  .panel > *:nth-child(3){animation-delay:.12s}
+  .panel > *:nth-child(4){animation-delay:.18s}
+  .panel > *:nth-child(5){animation-delay:.24s}
+  .panel > *:nth-child(6){animation-delay:.3s}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <img class="mark" src="assets/logo-black.png" alt="B.Broth">
+  <p class="eyebrow">Ancient remedy. Modern wellness.</p>
+  <h1>Our shop opens soon.</h1>
+  <p class="lede">
+    Pure Lebanese bone broth — beef and chicken bones simmered for fifteen hours
+    with root vegetables and warm spices, then sealed in glass. No preservatives,
+    no added salt, sugar or fat.
+  </p>
+  <hr class="rule">
+  <div class="facts">
+    <div class="fact"><b>15hr</b><span>Slow simmer</span></div>
+    <div class="fact"><b>250g</b><span>Glass jar</span></div>
+    <div class="fact"><b>12mo</b><span>Shelf stable</span></div>
+    <div class="fact"><b>100%</b><span>Lebanese</span></div>
+  </div>
+  <div class="actions">
+    <a class="btn btn-wa" id="wa" href="#" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.04 21.8h-.01c-1.77 0-3.5-.48-5.02-1.38l-.36-.21-3.73.98 1-3.64-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.89 9.9-9.89 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.46-4.44 9.89-9.9 9.89M20.52 3.45A11.8 11.8 0 0 0 12.04 0C5.46 0 .1 5.35.1 11.93c0 2.1.55 4.16 1.6 5.97L0 24l6.25-1.64a11.9 11.9 0 0 0 5.79 1.47h.01c6.58 0 11.93-5.35 11.94-11.93a11.86 11.86 0 0 0-3.47-8.45"/></svg>
+      Order on WhatsApp
+    </a>
+    <a class="btn btn-ig" href="https://instagram.com/b.brothleb" target="_blank" rel="noopener">Follow @b.brothleb</a>
+  </div>
+  <p class="foot">
+    Delivering across Lebanon · <a href="tel:+96171240389">+961 71 240 389</a>
+  </p>
+</div>
+
+<div class="shot">
+  <img src="assets/coming-soon-bg.jpg" alt="Pure Beef and Pure Chicken Bone Broth in 250g glass jars">
+</div>
+
+<script>
+  document.getElementById("wa").href =
+    "https://wa.me/96171240389?text=" +
+    encodeURIComponent("Hi B.Broth! I'd like to order some bone broth.");
+</script>
+</body>
+</html>
