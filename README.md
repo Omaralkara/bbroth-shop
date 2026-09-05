@@ -42,6 +42,7 @@ bottom of `index.html`:
 ```js
 const WA_NUMBER = "96171240389";   // where orders land
 const MIN_ORDER = 6;               // USD
+const FREE_DELIVERY = 24;          // subtotal at or above this ships free
 const ZONES = { beirut:{label:"Beirut", fee:3}, outside:{label:"Outside Beirut", fee:5} };
 const PRODUCTS = [ /* id, name, Arabic name, price, image, specs, description */ ];
 ```
@@ -55,7 +56,9 @@ Prices are plain numbers in USD. There is no tax handling, by design.
 ## How checkout works
 
 1. Customer adds jars; the cart persists in `localStorage`.
-2. They pick a delivery area, which sets the fee, and fill in name, phone and address.
+2. They pick a delivery area, which sets the fee — waived entirely once the
+   subtotal reaches `FREE_DELIVERY` — and fill in name, phone and address. A
+   progress bar in the cart shows how much more is needed to earn it.
 3. The order is refused below the `MIN_ORDER` value, and again if name, phone or address is blank.
 4. "Send order on WhatsApp" opens `wa.me/96171240389` with a pre-written,
    itemised order — quantities, subtotal, delivery, total, address and whether
@@ -89,5 +92,3 @@ nameserver change have to be done by hand.
 
 - Bundles / multi-jar pricing (deferred — decide the pricing first).
 - Confirm the Instagram handle; the site links `@b.brothleb`, read off the label QR caption.
-- Consider free delivery over a threshold — at a $6 minimum, a $3–5 delivery fee
-  is a large share of a one-jar order and will suppress basket size.

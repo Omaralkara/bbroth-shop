@@ -168,6 +168,9 @@ details p{margin:0; padding:0 1.5rem 1.35rem; color:var(--muted); font-size:.94r
 .zone{background:var(--white); border-radius:var(--radius); padding:1.6rem; text-align:center; box-shadow:var(--shadow)}
 .zone b{display:block; font-family:Outfit,sans-serif; font-size:1.9rem; font-weight:700; color:var(--gold-dark)}
 .zone span{font-size:.92rem; color:var(--muted)}
+.zone--free{background:var(--green)}
+.zone--free b{color:var(--gold)}
+.zone--free span{color:rgba(255,255,255,.75)}
 
 /* ---------- cart drawer ---------- */
 .overlay{position:fixed; inset:0; background:rgba(28,33,26,.5); z-index:90; opacity:0; pointer-events:none; transition:.25s}
@@ -218,6 +221,18 @@ details p{margin:0; padding:0 1.5rem 1.35rem; color:var(--muted); font-size:.94r
 .pay input{margin:0 0 .1rem}
 .warnbox{background:#FFF4E8; border:1px solid #F0D5B4; color:#8A5424; border-radius:10px;
   padding:.7rem .85rem; font-size:.84rem; margin-bottom:.9rem}
+.freebar{display:block; font-size:.84rem; color:var(--green-soft); margin-bottom:.85rem}
+.freebar b{color:var(--gold-dark)}
+.freebar i{display:block; height:5px; border-radius:999px; background:var(--cream-2); margin-top:.45rem; overflow:hidden}
+.freebar i::after{content:""; display:block; height:100%; width:var(--p,0%);
+  background:var(--gold); border-radius:999px; transition:width .3s ease}
+.freebar--won{font-weight:600; color:var(--gold-dark)}
+.freebar--won span::before{content:"✓ "}
+
+/* ---------- announcement ---------- */
+.announce{background:var(--green); color:var(--gold); text-align:center;
+  font-family:Outfit,sans-serif; font-size:.82rem; font-weight:600;
+  letter-spacing:.04em; padding:.55rem 22px}
 
 /* ---------- footer ---------- */
 footer{background:var(--green); color:rgba(255,255,255,.72); padding:3.5rem 0 2rem; font-size:.92rem}
@@ -249,6 +264,8 @@ footer a:hover{color:var(--gold)}
 </style>
 </head>
 <body>
+
+<div class="announce">Free delivery on orders over $24</div>
 
 <header>
   <div class="wrap nav">
@@ -386,8 +403,13 @@ footer a:hover{color:var(--gold)}
     <div class="zones">
       <div class="zone"><b>$3</b><span>Delivery within Beirut</span></div>
       <div class="zone"><b>$5</b><span>Outside Beirut</span></div>
+      <div class="zone zone--free"><b>Free</b><span>On orders over $24</span></div>
       <div class="zone"><b>$6</b><span>Minimum order value</span></div>
     </div>
+    <p style="margin:1.6rem 0 0;color:var(--muted);font-size:.94rem;max-width:44rem">
+      Four jars or more and we deliver anywhere in Lebanon at our cost — sealed jars keep
+      for a year in the cupboard, so there is no reason to order one at a time.
+    </p>
   </div>
 </section>
 
@@ -404,6 +426,7 @@ footer a:hover{color:var(--gold)}
     <details><summary>Why does it set like jelly in the jar?</summary><p>That is the collagen, and it is the sign of a proper long simmer. It melts back to liquid the moment it warms.</p></details>
     <details><summary>Is it halal?</summary><p>Yes — both the beef and the chicken are halal certified, and the product is non-GMO.</p></details>
     <details><summary>How do I pay?</summary><p>Cash on delivery, or Whish transfer to 71 240 389. We confirm every order on WhatsApp before it goes out.</p></details>
+    <details><summary>What does delivery cost?</summary><p>$3 inside Beirut and $5 anywhere else in Lebanon — and it is free on any order over $24. The minimum order is $6.</p></details>
     <details><summary>How long does delivery take?</summary><p>We will confirm a delivery window with you on WhatsApp as soon as your order comes through — usually same or next day inside Beirut.</p></details>
   </div>
 </section>
@@ -450,6 +473,7 @@ footer a:hover{color:var(--gold)}
 <script>
 const WA_NUMBER = "96171240389";
 const MIN_ORDER = 6;
+const FREE_DELIVERY = 24;   // subtotal at or above this ships free
 const ZONES = { beirut:{label:"Beirut", fee:3}, outside:{label:"Outside Beirut", fee:5} };
 
 const PRODUCTS = [
@@ -579,6 +603,7 @@ function render(){
 
   foot.innerHTML = `
     ${under ? `<div class="warnbox">Minimum order is ${money(MIN_ORDER)}. Add ${money(MIN_ORDER-sub)} more to check out.</div>` : ``}
+    <div id="freeNudge"></div>
     <div class="totals" id="totals"></div>
     <button class="btn btn-primary btn-wide" id="checkout" style="margin-top:.9rem" ${under?"disabled":""}>
       Send order on WhatsApp
@@ -589,11 +614,27 @@ function render(){
 
   const zoneSel = document.getElementById("zone");
   const paint = () => {
-    const fee = ZONES[zoneSel.value].fee;
+    const free = sub >= FREE_DELIVERY;
+    const fee  = free ? 0 : ZONES[zoneSel.value].fee;
     document.getElementById("totals").innerHTML = `
       <div><span>Subtotal</span><span>${money(sub)}</span></div>
-      <div><span>Delivery — ${ZONES[zoneSel.value].label}</span><span>${money(fee)}</span></div>
+      <div><span>Delivery — ${ZONES[zoneSel.value].label}</span>
+        <span>${free ? `<s style="color:var(--muted)">${money(ZONES[zoneSel.value].fee)}</s> <b style="color:var(--gold-dark)">Free</b>` : money(fee)}</span></div>
       <div class="grand"><span>Total</span><span>${money(sub+fee)}</span></div>`;
+
+    const nudge = document.getElementById("freeNudge");
+    if(nudge){
+      if(free){
+        nudge.className = "freebar freebar--won";
+        nudge.innerHTML = `<span>Free delivery unlocked</span>`;
+      } else {
+        const pct = Math.min(100, (sub / FREE_DELIVERY) * 100);
+        nudge.className = "freebar";
+        nudge.innerHTML =
+          `<span>Add <b>${money(FREE_DELIVERY - sub)}</b> more for free delivery</span>
+           <i style="--p:${pct}%"></i>`;
+      }
+    }
   };
   zoneSel.onchange = paint; paint();
 
@@ -610,7 +651,8 @@ function checkout(){
   const sub  = subtotal();
   if(sub < MIN_ORDER) return;
   const zone = document.getElementById("zone").value;
-  const fee  = ZONES[zone].fee;
+  const free = sub >= FREE_DELIVERY;
+  const fee  = free ? 0 : ZONES[zone].fee;
   const name = (document.getElementById("cName").value || "").trim();
   const phone= (document.getElementById("cPhone").value || "").trim();
   const addr = (document.getElementById("cAddr").value || "").trim();
@@ -637,7 +679,7 @@ function checkout(){
 ${lines}
 
 Subtotal: ${money(sub)}
-Delivery (${ZONES[zone].label}): ${money(fee)}
+Delivery (${ZONES[zone].label}): ${free ? "FREE" : money(fee)}
 *Total: ${money(sub+fee)}*
 
 *Name:* ${name}
