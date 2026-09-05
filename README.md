@@ -77,12 +77,13 @@ ingredient copy on the site was transcribed from the printed label artwork
 > **Notes for the next print run.** The physical label reads "protien"
 > (protein) and "Tumeric" (turmeric); the website spells both correctly.
 >
-> The beef label also disagrees with itself: the front panel says **18 g protein
-> per jar** (confirmed correct by Omar, and what the site shows) while the
-> nutrition panel says 6 g per 100 g serving, which over 2.5 servings comes to
-> 15 g. The site states 7.2 g per serving so the two figures reconcile. The
-> printed panel should be corrected to match. Chicken is consistent at 20 g per
-> jar / 8 g per serving.
+> The beef label disagrees with itself: the front panel says **18 g protein per
+> jar** while the nutrition panel says **6 g per 100 g serving**, which over 2.5
+> servings comes to 15 g. On Omar's instruction the site transcribes both
+> printed figures exactly as they appear on the sticker rather than reconciling
+> them, so the website always matches the jar in the customer's hand. Fix the
+> panel at the next print run and update `index.html` to match. Chicken is
+> already consistent at 20 g per jar / 8 g per serving.
 
 ## Deploying to bbroth.asia
 
