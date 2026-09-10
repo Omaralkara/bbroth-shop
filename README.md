@@ -107,6 +107,13 @@ on `@` would buy a little redundancy. The `www` CNAME, nameservers and the
 
 HTTPS is enforced and the certificate renews itself.
 
+## Email signatures
+
+`assets/email/signature-logo.png` is loaded live by the team's email
+signatures — mail clients will not embed images, so every sent email fetches
+it from bbroth.asia. **Do not rename, move or delete it**, or the logo breaks
+in every signature already in use. Replace the file in place to update it.
+
 ## Card payments
 
 `CARD_PAYMENT` in `index.html` is `false`, so checkout offers cash on delivery
