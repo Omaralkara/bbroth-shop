@@ -428,7 +428,7 @@ footer a:hover{color:var(--gold)}
       <p>Order on the site, we confirm on WhatsApp, and you pay the driver in cash or send it by Whish. No card needed.</p>
     </div>
     <div class="zones">
-      <div class="zone"><b>$3</b><span>Delivery within Beirut</span></div>
+      <div class="zone"><b>$4</b><span>Delivery within Beirut</span></div>
       <div class="zone"><b>$5</b><span>Outside Beirut</span></div>
       <div class="zone zone--free"><b>Free</b><span>On orders over $24</span></div>
       <div class="zone"><b>$6</b><span>Minimum order value</span></div>
@@ -453,7 +453,7 @@ footer a:hover{color:var(--gold)}
     <details><summary>Why does it set like jelly in the jar?</summary><p>That is the collagen, and it is the sign of a proper long simmer. It melts back to liquid the moment it warms.</p></details>
     <details><summary>Is it halal?</summary><p>Yes — both the beef and the chicken are halal certified, and the product is non-GMO.</p></details>
     <details><summary>How do I pay?</summary><p>Cash on delivery, or Whish transfer to 71 240 389. We confirm every order on WhatsApp before it goes out.</p></details>
-    <details><summary>What does delivery cost?</summary><p>$3 inside Beirut and $5 anywhere else in Lebanon — and it is free on any order over $24. The minimum order is $6.</p></details>
+    <details><summary>What does delivery cost?</summary><p>$4 inside Beirut and $5 anywhere else in Lebanon — and it is free on any order over $24. The minimum order is $6.</p></details>
     <details><summary>How long does delivery take?</summary><p>We will confirm a delivery window with you on WhatsApp as soon as your order comes through — usually same or next day inside Beirut.</p></details>
   </div>
 </section>
@@ -513,7 +513,7 @@ const FREE_DELIVERY = 24;   // subtotal at or above this ships free
 // the checkout then offers "Pay by card" and flags it on the WhatsApp order so
 // the link gets sent instead of collecting cash.
 const CARD_PAYMENT = false;
-const ZONES = { beirut:{label:"Beirut", fee:3}, outside:{label:"Outside Beirut", fee:5} };
+const ZONES = { beirut:{label:"Beirut", fee:4}, outside:{label:"Outside Beirut", fee:5} };
 
 const PRODUCTS = [
   { id:"beef", name:"Pure Beef Bone Broth", ar:"مرق عظم بقر صافي", price:7.5,
@@ -624,7 +624,7 @@ function render(){
     <div class="field" style="margin-top:1.2rem">
       <label for="zone">Delivery area</label>
       <select id="zone">
-        <option value="beirut">Beirut — $3</option>
+        <option value="beirut">Beirut — $4</option>
         <option value="outside">Outside Beirut — $5</option>
       </select>
     </div>
