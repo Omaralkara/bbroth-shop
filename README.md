@@ -40,7 +40,7 @@ Everything a shopkeeper needs to change sits in the `<script>` block at the
 bottom of `index.html`:
 
 ```js
-const WA_NUMBER = "96171240389";   // where orders land
+const WA_NUMBER = "96171147200";   // where orders land
 const MIN_ORDER = 6;               // USD
 const FREE_DELIVERY = 24;          // subtotal at or above this ships free
 const ZONES = { beirut:{label:"Beirut", fee:3}, outside:{label:"Outside Beirut", fee:5} };
@@ -60,7 +60,7 @@ Prices are plain numbers in USD. There is no tax handling, by design.
    subtotal reaches `FREE_DELIVERY` — and fill in name, phone and address. A
    progress bar in the cart shows how much more is needed to earn it.
 3. The order is refused below the `MIN_ORDER` value, and again if name, phone or address is blank.
-4. "Send order on WhatsApp" opens `wa.me/96171240389` with a pre-written,
+4. "Send order on WhatsApp" opens `wa.me/96171147200` with a pre-written,
    itemised order — quantities, subtotal, delivery, total, address and whether
    they are paying cash on delivery or by Whish.
 
